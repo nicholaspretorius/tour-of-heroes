@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { Hero } from './../app.hero';
 import { HeroService } from '../hero.service';
 
@@ -11,8 +12,12 @@ export class HeroesComponent implements OnInit {
 
   public heroes: Hero[];
   public chosen: Hero;
+  public hero: Hero;
 
-  constructor(private readonly heroService: HeroService) { }
+  constructor(
+    private readonly heroService: HeroService,
+    private readonly location: Location,
+  ) { }
 
   ngOnInit() {
     this.getHeroes();
@@ -25,6 +30,24 @@ export class HeroesComponent implements OnInit {
 
   public select(hero: Hero) {
     this.chosen = hero;
+  }
+
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero).subscribe();
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

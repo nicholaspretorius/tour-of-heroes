@@ -1,7 +1,10 @@
 <div *ngIf="hero">
-  <h4>{{ hero._id }} {{ hero.name }}</h4>
+  <h4>{{ hero.id }} {{ hero.name }}</h4>
   <div>
-    <input type="text" [(ngModel)]="hero.name">
+    <form (submit)="save(hero)">
+      <input name="name" type="text" [(ngModel)]="hero.name">
+      <button type="submit">Save</button>
+    </form>
   </div>
 
   <button (click)="goBack()">Back</button>
